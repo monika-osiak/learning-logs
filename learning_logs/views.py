@@ -25,8 +25,7 @@ def topic(request, topic_id):
     """Wyświetla pojedynczy temat i wszystkie powiązane z nim wpisy."""
     topic = Topic.objects.get(id=topic_id)
     # Upewniamy się, że temat należy do bieżącego użytkownika
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(topic, request)
 
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
@@ -78,8 +77,7 @@ def edit_entry(request, entry_id):
     """Edycja istniejącego wpisu."""
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(topic, request)
 
     if request.method != 'POST':
         # Żądanie początkowe, wypełnienie formularza aktualną treścią wpisu
@@ -93,3 +91,8 @@ def edit_entry(request, entry_id):
 
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+
+def check_topic_owner(topic, request):
+    if topic.owner != request.user:
+        raise Http404
