@@ -11,4 +11,7 @@ urlpatterns = [
 
     # Strona wylogowania
     re_path(r'^logout/$', views.logout_view, name='logout'),
+
+    # Strona rejestracji
+    re_path(r'^register/$', views.register, name='register'),
 ]
