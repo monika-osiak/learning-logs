@@ -7,6 +7,7 @@
 <h5>
     {% if user.is_authenticated %}
         Witaj, {{ user.username }}.
+        <a href="{% url 'users:logout' %}">Wyloguj</a>
     {% else %}
         <a href="{% url 'users:login' %}">Zaloguj się</a>
     {% endif %}
